@@ -13,12 +13,12 @@
     <Content Include="RedLine.toc">
       <SubType>TableOfContents</SubType>
     </Content>
-    <Content Include="Frame.xml">
+    <Content Include="Redline.xml">
       <SubType>Frame</SubType>
     </Content>
-    <Content Include="Frame.lua">
+    <Content Include="Redline.lua">
       <SubType>Code</SubType>
-      <DependentUpon>Frame.xml</DependentUpon>
+      <DependentUpon>Redline.xml</DependentUpon>
     </Content>
   </ItemGroup>
   <Import Project="$(DevEnvDir)\Extensions\Tools\MSBuild\AddonStudio\Wow\3.0\WowAddonStudio.targets" />
