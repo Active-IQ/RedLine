@@ -1,5 +1,7 @@
 -- Author      : Xandre-Whitemane
 -- Create Date : 2/19/2023 10:06:05 PM
+-- revision    : 1.2
+local MIN_FRAME_SIZE = 150
 
 function UpdatePowerValues()
     -- Get the current player's class and spec
@@ -196,33 +198,25 @@ function Redline_Onload()
     
     local userResized = false
 
-    Redline:SetScript("OnSizeChanged", function(self, width, height)
-        if not userResized then
-             -- Set minimum and maximum dimensions for the frame
-			local minWidth, minHeight = 200, 200
-            local maxWidth, maxHeight = UIParent:GetWidth() - 500, UIParent:GetHeight() - 500
+Redline:SetScript("OnSizeChanged", function(self, width, height)
+    if not userResized then
+        -- Set minimum and maximum dimensions for the frame
+        local minWidth, minHeight = 150, 150
+        local maxWidth, maxHeight = UIParent:GetWidth() - 500, UIParent:GetHeight() - 500
 
-            -- Clamp the frame dimensions to the allowed range
-            self:SetWidth(math.max(minWidth, math.min(maxWidth, width)))
-            self:SetHeight(math.max(minHeight, math.min(maxHeight, height)))           
-		end
-        userResized = false
-    end)
-    	    
-    Redline:SetScript("OnMouseDown", function(self, button)
-        if button == "RightButton" then
-            self:StartSizing()
-            userResized = true
+        -- Clamp the frame dimensions to the allowed range
+        self:SetWidth(math.max(minWidth, math.min(maxWidth, width)))
+        self:SetHeight(math.max(minHeight, math.min(maxHeight, height)))
+
+        -- Set the dimensions to 150x150 if either the width or height is less than 150
+        if self:GetWidth() < 150 or self:GetHeight() < 150 then
+            self:SetSize(150, 150)
         end
-    end)
+    end
+    userResized = false
+end)
 
-    Redline:SetScript("OnMouseUp", function(self, button)
-        if button == "RightButton" then
-            self:StopMovingOrSizing()
-        end
-    end)
-
-    -- Make the frame draggable
+-- Make the frame draggable
         Redline:SetMovable(true)
         Redline:EnableMouse(true)
         Redline:RegisterForDrag("LeftButton")
@@ -231,7 +225,7 @@ function Redline_Onload()
 
 
    
-
+-- Binds the Text Strings to the Frame window and adjusts the spacing to compensate for icon size during the dragging function
     local function UpdatePowerTextAnchors()
         local font, fontSize, fontFlags = Redline.attackPowerText:GetFont()
         local spacing = fontSize / 2 -- adjust the spacing between the text elements based on the font size
@@ -242,12 +236,12 @@ function Redline_Onload()
         Redline.unitStatStrengthText:SetPoint("TOPLEFT", Redline.healingPowerText, "BOTTOMLEFT", 0, -spacing)
         Redline.unitStatIntellectText:SetPoint("TOPLEFT", Redline.unitStatStrengthText, "BOTTOMLEFT", 0, -spacing)
         Redline.unitStatAgilityText:SetPoint("TOPLEFT", Redline.unitStatIntellectText, "BOTTOMLEFT", 0, -spacing)
-        Redline.weaponDamageText:SetPoint("TOPLEFT", Redline.unitStatAgilityText, "BOTTOMLEFT", 0, -spacing)
+--        Redline.weaponDamageText:SetPoint("TOPLEFT", Redline.unitStatAgilityText, "BOTTOMLEFT", 0, -spacing)
     end
  -- Create the font string objects for displaying power values
     Redline:SetScript("OnSizeChanged", function(self)
        	local size = math.max(self:GetWidth(), self:GetHeight()) -- use the larger of the two dimensions
-        local fontSize = math.floor(size / 10) -- adjust this divisor to change the font scaling
+        local fontSize = math.floor(size / 11) -- adjust this divisor to change the font scaling
         local font = "Fonts\\FRIZQT__.TTF" -- replace with your desired font file
         
                 Redline.attackPowerText:SetFont(font, fontSize, "OUTLINE")
@@ -256,7 +250,7 @@ function Redline_Onload()
                 Redline.unitStatStrengthText:SetFont(font, fontSize, "OUTLINE")
                 Redline.unitStatIntellectText:SetFont(font, fontSize, "OUTLINE")
                 Redline.unitStatAgilityText:SetFont(font, fontSize, "OUTLINE")
-                Redline.weaponDamageText:SetFont(font, fontSize, "OUTLINE")
+--                Redline.weaponDamageText:SetFont(font, fontSize, "OUTLINE")
         UpdatePowerTextAnchors()
 	end)
 
@@ -286,8 +280,8 @@ function Redline_Onload()
     Redline.unitStatAgilityText:SetPoint("TOPLEFT", Redline, "TOPLEFT", 15, -90)
 --    Redline.unitStatAgilityText:SetFont(font, fontSize, "OUTLINE")
 
-    Redline.weaponDamageText = Redline:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-    Redline.weaponDamageText:SetPoint("TOPLEFT", Redline, "TOPLEFT", 15, -105)
+ --   Redline.weaponDamageText = Redline:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+--    Redline.weaponDamageText:SetPoint("TOPLEFT", Redline, "TOPLEFT", 15, -105)
     
 
 	-- Register for events and update the power values
